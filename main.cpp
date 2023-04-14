@@ -11,9 +11,9 @@
 
 #include "solver.hpp"
 
-#define WINDOW_WIDTH 1600
-#define WINDOW_HEIGHT 900
-#define LOG 1
+#define WINDOW_WIDTH 1600.0f
+#define WINDOW_HEIGHT 900.0f
+#define LOG 0
 
 struct VerletSolver solver;
 
@@ -56,7 +56,7 @@ int main()
     sf::RenderWindow window(sf::VideoMode(sf::Vector2u(WINDOW_WIDTH, WINDOW_HEIGHT)), "SFML works!", sf::Style::Default, settings);
     window.setFramerateLimit(240);
 
-    solver.set_constraints({WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2}, WINDOW_WIDTH / 4);
+    solver.set_constraints({WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f}, WINDOW_HEIGHT / 2.0f);
     solver.set_substeps(8);
 
     sf::Font font;
@@ -93,7 +93,7 @@ int main()
 
             if (event.type == sf::Event::Resized)
             {
-                solver.set_constraints({event.size.width / 2, event.size.height / 2}, event.size.width / 4);
+                solver.set_constraints({(float)event.size.width / 2.0f, (float)event.size.height / 2.0f}, (float)event.size.height / 2.0f);
                 window.setView(sf::View(sf::FloatRect({0, 0}, sf::Vector2f(event.size.width, event.size.height))));
                 solver.clear_objects();
             }
