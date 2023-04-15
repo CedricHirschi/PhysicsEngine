@@ -1,0 +1,9 @@
+{
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "e:\\cedr0\\Documents\\Github\\build",
+            "binaryPath": "e:\\cedr0\\Documents\\Github\\build\\main.exe",
+            "binaryArgs": []
+        }
+    ]
+}
