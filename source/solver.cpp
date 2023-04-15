@@ -48,15 +48,45 @@ void VerletSolver::check_collisions(float dt)
 
 void VerletSolver::apply_constraints()
 {
-    std::for_each(std::execution::par_unseq, m_objects.begin(), m_objects.end(), [&](VerletObject &object)
-                  {
-                      const auto v = m_constraint_center - object.position;
-                      const float distance = v.lengthSq();
-                      if (distance > (m_constraint_radius - object.radius) * (m_constraint_radius - object.radius))
+    switch (m_constraint_type)
+    {
+    case 0:
+        break;
+    case 1:
+        std::for_each(std::execution::par_unseq, m_objects.begin(), m_objects.end(), [&](VerletObject &object)
                       {
-                          const auto n = v / sqrtf(distance);
-                          object.position = m_constraint_center - n * (m_constraint_radius - object.radius);
+                  const auto v = m_constraint_center - object.position;
+                  const float distance = v.lengthSq();
+                  if (distance > (m_constraint_radius - object.radius) * (m_constraint_radius - object.radius))
+                  {
+                      const auto n = v / sqrtf(distance);
+                      object.position = m_constraint_center - n * (m_constraint_radius - object.radius);
+                  } });
+        break;
+    case 2:
+        std::for_each(std::execution::par_unseq, m_objects.begin(), m_objects.end(), [&](VerletObject &object)
+                      {
+                      if (object.position.x < m_constraint_center.x - m_constraint_radius + object.radius)
+                      {
+                          object.position.x = m_constraint_center.x - m_constraint_radius + object.radius;
+                      }
+                      else if (object.position.x > m_constraint_center.x + m_constraint_radius - object.radius)
+                      {
+                          object.position.x = m_constraint_center.x + m_constraint_radius - object.radius;
+                      }
+
+                      if (object.position.y < m_constraint_center.y - m_constraint_radius + object.radius)
+                      {
+                          object.position.y = m_constraint_center.y - m_constraint_radius + object.radius;
+                      }
+                      else if (object.position.y > m_constraint_center.y + m_constraint_radius - object.radius)
+                      {
+                          object.position.y = m_constraint_center.y + m_constraint_radius - object.radius;
                       } });
+        break;
+    default:
+        break;
+    }
 }
 
 void VerletSolver::update_objects(float dt)
@@ -91,8 +121,9 @@ void VerletSolver::set_substeps(unsigned _substeps)
     m_substeps = _substeps;
 }
 
-void VerletSolver::set_constraints(sf::Vector2f _position, float _radius)
+void VerletSolver::set_constraints(uint8_t _type, sf::Vector2f _position, float _radius)
 {
+    m_constraint_type = _type;
     m_constraint_center = _position;
     m_constraint_radius = _radius;
 }
@@ -112,14 +143,32 @@ const std::vector<VerletObject> &VerletSolver::get_objects()
     return m_objects;
 }
 
-const sf::CircleShape &VerletSolver::get_constraint()
+const sf::Shape &VerletSolver::get_constraint()
 {
-    static sf::CircleShape constraint;
-    constraint.setRadius(m_constraint_radius);
-    constraint.setOrigin({m_constraint_radius, m_constraint_radius});
-    constraint.setPosition(m_constraint_center);
-    constraint.setFillColor(sf::Color::Black);
-    constraint.setOutlineColor(sf::Color::White);
-    constraint.setOutlineThickness(2.0f);
-    return constraint;
+    switch (m_constraint_type)
+    {
+    case 0:
+        break;
+    case 1:
+        static sf::CircleShape circle_constraint;
+        circle_constraint.setRadius(m_constraint_radius);
+        circle_constraint.setOrigin({m_constraint_radius, m_constraint_radius});
+        circle_constraint.setPosition(m_constraint_center);
+        circle_constraint.setFillColor(sf::Color::Black);
+        circle_constraint.setOutlineColor(sf::Color::White);
+        circle_constraint.setOutlineThickness(2.0f);
+        return circle_constraint;
+    case 2:
+        static sf::RectangleShape rect_constraint;
+        rect_constraint.setSize({m_constraint_radius * 2.0f, m_constraint_radius * 2.0f});
+        rect_constraint.setOrigin({m_constraint_radius, m_constraint_radius});
+        rect_constraint.setPosition(m_constraint_center);
+        rect_constraint.setFillColor(sf::Color::Black);
+        rect_constraint.setOutlineColor(sf::Color::White);
+        rect_constraint.setOutlineThickness(2.0f);
+        return rect_constraint;
+    }
+
+    static sf::RectangleShape rect_constraint;
+    return rect_constraint;
 }
