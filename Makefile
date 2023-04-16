@@ -8,8 +8,6 @@ USER = $(wildcard *.cpp)
 SRC = $(wildcard $(SOURCE_DIR)/*.cpp)
 OBJ = $(patsubst $(SOURCE_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SRC)) $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(USER))
 
-RM = del
-RMDIR = rmdir
 CXX = g++
 OPT = -O3 -fopenmp
 CFLAGS = -I$(INCLUDE_DIR) -I$(SFML_DIR)/include -DSFML_STATIC $(OPT)
@@ -55,8 +53,8 @@ run: build
 
 clean:
 	echo Cleaning...
-	if exist $(BUILD_DIR) (echo Deleting $(BLUE)$(BUILD_DIR)$(NC) directory... && $(RMDIR) /S /Q $(BUILD_DIR))
-	if exist $(MAIN_NAME).zip (echo Deleting $(BLUE)$(MAIN_NAME).zip$(NC)... && $(RM) /S /Q *.zip)
+	if exist $(BUILD_DIR) (echo Deleting $(BLUE)$(BUILD_DIR)$(NC) directory... && rmdir /S /Q $(BUILD_DIR))
+	if exist $(MAIN_NAME).zip (echo Deleting $(BLUE)$(MAIN_NAME).zip$(NC)... && del /S /Q *.zip)
 	$(DONE)
 
 pack: build
