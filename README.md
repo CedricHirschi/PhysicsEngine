@@ -5,7 +5,6 @@ This is a simple physics engine written in C++ using the SFML library. It is a w
 
 ## Installation
 ### Pre-requisites
-- SFML 2.6.0 for GCC 12.2.0 (MinGW) - [windows-gcc-1220-mingw-64](https://artifacts.sfml-dev.org/by-branch/master/)
 - GCC / G++ 12.2.0 (MinGW) - [Tutorial](https://www.freecodecamp.org/news/how-to-install-c-and-cpp-compiler-on-windows/)
 
 ### Build
