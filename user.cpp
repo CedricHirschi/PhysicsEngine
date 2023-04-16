@@ -32,7 +32,6 @@ static sf::Color getRainbow(float t)
             static_cast<uint8_t>(255.0f * b * b)};
 }
 
-void check_events(sf::RenderWindow &window, bool &spawn);
 void show_statistics(sf::RenderWindow &window, struct VerletSolver &solver, sf::Font &font, float dt);
 void spawn_objects(struct VerletSolver &solver, float dt);
 
@@ -61,7 +60,7 @@ void User::OnUpdate(sf::RenderWindow &window, float dt)
     {
         spawn_clock.restart();
         auto position = sf::Vector2f(sf::Mouse::getPosition(window));
-        auto &object = solver.add_object(position, randfloat(7.0f, 30.0f));
+        auto &object = solver.add_object(position, randfloat(3.0f, 15.0f));
         object.set_color(getRainbow(total_clock.getElapsedTime().asSeconds()));
     }
 
@@ -132,7 +131,7 @@ void spawn_objects(struct VerletSolver &solver, float dt)
         auto position = solver.get_constraint().getPosition() - sf::Vector2f(0.0f, solver.get_constraint().getGlobalBounds().height / 2.5f);
         auto angle = 3.14f / 2.0f * sin(total_clock.getElapsedTime().asSeconds());
         auto velocity = sf::Vector2f(100.0f * sin(angle), 100.0f * cos(angle));
-        auto &object = solver.add_object(position, randfloat(7.0f, 30.0f));
+        auto &object = solver.add_object(position, randfloat(3.0f, 15.0f));
         object.set_velocity(velocity, dt);
         object.set_color(getRainbow(total_clock.getElapsedTime().asSeconds()));
     }
