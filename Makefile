@@ -57,9 +57,9 @@ clean:
 	if exist $(MAIN_NAME).zip (echo Deleting $(BLUE)$(MAIN_NAME).zip$(NC)... && del /S /Q *.zip)
 	$(DONE)
 
-pack: build
-	echo Packing executable into $(BLUE)$(MAIN_NAME).zip$(NC)...
-	zip -u -j $(MAIN_NAME).zip -A $(BUILD_DIR)/$(MAIN_NAME).exe
+pack:
+	echo Packing source, include and SFML directories into $(BLUE)$(MAIN_NAME).zip$(NC)...
+	zip -r $(MAIN_NAME).zip $(SOURCE_DIR) $(INCLUDE_DIR) $(SFML_DIR) Makefile
 	$(DONE)
 
 find:
