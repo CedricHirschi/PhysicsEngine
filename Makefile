@@ -8,7 +8,7 @@ USER = $(wildcard *.cpp)
 SRC = $(wildcard $(SOURCE_DIR)/*.cpp)
 OBJ = $(patsubst $(SOURCE_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SRC)) $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(USER))
 
-CXX = mingw64/bin/g++.exe
+CXX = g++
 OPT = -O3 -fopenmp
 CFLAGS = -I$(INCLUDE_DIR) -I$(SFML_DIR)/include -DSFML_STATIC $(OPT)
 LFLAGS = -L$(SFML_DIR)/lib -lsfml-graphics-s -lsfml-window-s -lsfml-system-s -lsfml-audio-s -lsfml-network-s -lopengl32 -lwinmm -lgdi32 -lfreetype -static-libstdc++ $(OPT)
