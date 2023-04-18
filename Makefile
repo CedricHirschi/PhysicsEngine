@@ -10,8 +10,8 @@ OBJ = $(patsubst $(SOURCE_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SRC)) $(patsubst %.cpp,$
 
 CXX = g++
 OPT = -O3 -fopenmp
-CFLAGS = -I$(INCLUDE_DIR) -I$(SFML_DIR)/include -DSFML_STATIC $(OPT)
-LFLAGS = -L$(SFML_DIR)/lib -lsfml-graphics-s -lsfml-window-s -lsfml-system-s -lsfml-audio-s -lsfml-network-s -lopengl32 -lwinmm -lgdi32 -lfreetype -static-libstdc++ $(OPT)
+CFLAGS = -I$(INCLUDE_DIR) -I$(SFML_DIR)/include -DSFML_STATIC -lstdc++fs $(OPT)
+LFLAGS = -L$(SFML_DIR)/lib -lsfml-graphics-s -lsfml-window-s -lsfml-system-s -lsfml-audio-s -lsfml-network-s -lopengl32 -lwinmm -lgdi32 -lfreetype -static-libstdc++ -lstdc++fs $(OPT)
 
 SHELL = cmd.exe
 RED=[0;31m

@@ -23,6 +23,9 @@
 # build folder
 build/
 
+# vscode folder
+.vscode/
+
 # zip files
 *.zip
 
