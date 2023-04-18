@@ -2,10 +2,10 @@
 
 #define FRICTION 0
 
-void VerletObject::position_update(float dt)
+void VerletObject::position_update(double dt)
 {
     // calculate position difference
-    sf::Vector2f position_diff = (position - position_last);
+    sf::Vector2<double> position_diff = (position - position_last);
     // apply friction
 #if FRICTION
     position_diff *= 0.999f;
@@ -18,22 +18,22 @@ void VerletObject::position_update(float dt)
     acceleration = {};
 }
 
-void VerletObject::accelerate(sf::Vector2f _acceleration)
+void VerletObject::accelerate(sf::Vector2<double> _acceleration)
 {
     acceleration += _acceleration;
 }
 
-void VerletObject::set_velocity(sf::Vector2f _velocity, float dt)
+void VerletObject::set_velocity(sf::Vector2<double> _velocity, double dt)
 {
     position_last = position - (_velocity * dt);
 }
 
-void VerletObject::add_velocity(sf::Vector2f _velocity, float dt)
+void VerletObject::add_velocity(sf::Vector2<double> _velocity, double dt)
 {
     position_last -= _velocity * dt;
 }
 
-sf::Vector2f VerletObject::get_velocity(float dt)
+sf::Vector2<double> VerletObject::get_velocity(double dt)
 {
     return (position - position_last) / dt;
 }

@@ -38,9 +38,12 @@ void spawn_objects(struct VerletSolver &solver, float dt);
 sf::Font font;
 bool spawn = true;
 
+std::vector<unsigned> fps_choices = {30, 60, 75, 100, 144, 240, 360, 750, 1000};
+unsigned fps_choice = fps_choices.size() - 1;
+
 void User::OnStartup(sf::RenderWindow &window)
 {
-    window.setFramerateLimit(240);
+    // window.setFramerateLimit(240);
 
     solver.set_constraints(2, {window.getSize().x / 2.0f, window.getSize().y / 2.0f}, std::min(window.getSize().x, window.getSize().y) / 2.50f);
     solver.set_substeps(16);
@@ -56,26 +59,37 @@ void User::OnUpdate(sf::RenderWindow &window, float dt)
     solver.update(dt);
 
     // if mouse is pressed, spawn a new object
-    if (spawn_clock.getElapsedTime().asSeconds() > 0.1f && sf::Mouse::isButtonPressed(sf::Mouse::Left))
+    if (spawn_clock.getElapsedTime().asSeconds() > 0.001f && sf::Mouse::isButtonPressed(sf::Mouse::Left))
     {
         spawn_clock.restart();
-        auto position = sf::Vector2f(sf::Mouse::getPosition(window));
-        auto &object = solver.add_object(position, randfloat(3.0f, 15.0f));
+        auto position = sf::Vector2<double>(sf::Mouse::getPosition(window));
+        auto radius = randfloat(3.0f, 15.0f);
+
+        auto objects = solver.get_objects();
+        if (!objects.empty())
+        {
+            auto prev_object = objects.back();
+            auto min_dist = (prev_object.radius + radius) * (prev_object.radius + radius);
+            if ((prev_object.position - position).lengthSq() < min_dist)
+                return;
+        }
+
+        auto &object = solver.add_object(position, radius);
         object.set_color(getRainbow(total_clock.getElapsedTime().asSeconds()));
     }
 
     // spawn new object every 0.5 seconds
     spawn_objects(solver, dt);
 
-    // show_statistics(window, solver, font, dt);
+    show_statistics(window, solver, font, dt);
 
     window.draw(solver.get_constraint());
     for (auto &object : solver.get_objects())
     {
         sf::CircleShape shape(object.radius);
         shape.setFillColor(object.color);
-        shape.setOrigin({object.radius, object.radius});
-        shape.setPosition(object.position);
+        shape.setOrigin({(float)object.radius, (float)object.radius});
+        shape.setPosition((sf::Vector2f)object.position);
         window.draw(shape);
     }
 }
@@ -87,15 +101,22 @@ void User::OnEvent(sf::RenderWindow &window, sf::Event &event)
     {
     case sf::Event::KeyPressed:
         // std::cout << "\tKey: " << event.key.code << std::endl;
-        auto key = event.key.code;
-        if (key == sf::Keyboard::S)
+        if (event.key.code == sf::Keyboard::S)
         {
             spawn = !spawn;
         }
-        else if (key == sf::Keyboard::R)
+        else if (event.key.code == sf::Keyboard::R)
         {
             solver.clear_objects();
         }
+        else if (event.key.code == sf::Keyboard::F)
+        {
+            fps_choice = (fps_choice + 1) % fps_choices.size();
+            window.setFramerateLimit(fps_choices[fps_choice]);
+        }
+        break;
+    case sf::Event::Resized:
+        solver.set_constraints(2, {window.getSize().x / 2.0f, window.getSize().y / 2.0f}, std::min(window.getSize().x, window.getSize().y) / 2.50f);
         break;
     }
 }
@@ -109,7 +130,7 @@ void show_statistics(sf::RenderWindow &window, struct VerletSolver &solver, sf::
         last_fps.erase(last_fps.begin());
     }
 
-    sf::Text fps(font, "FPS: " + std::to_string(int(std::accumulate(last_fps.begin(), last_fps.end(), 0.0f) / last_fps.size())), 20);
+    sf::Text fps(font, "FPS: " + std::to_string(int(std::accumulate(last_fps.begin(), last_fps.end(), 0.0f) / last_fps.size())) + "  (" + std::to_string(fps_choices[fps_choice]) + ")", 20);
     fps.setFillColor(sf::Color::White);
     fps.setPosition({10.0f, 10.0f});
     window.draw(fps);
@@ -125,13 +146,24 @@ void spawn_objects(struct VerletSolver &solver, float dt)
     static sf::Clock spawn_clock;
     static sf::Clock total_clock;
 
-    if (spawn_clock.getElapsedTime().asSeconds() > 0.1f && spawn)
+    if (spawn_clock.getElapsedTime().asSeconds() > 0.001f && spawn)
     {
         spawn_clock.restart();
-        auto position = solver.get_constraint().getPosition() - sf::Vector2f(0.0f, solver.get_constraint().getGlobalBounds().height / 2.5f);
+        auto position = (sf::Vector2<double>)solver.get_constraint().getPosition() - sf::Vector2<double>(0.0f, solver.get_constraint().getGlobalBounds().height / 2.5f);
+        float radius = randfloat(3.0f, 30.0f);
+
+        auto objects = solver.get_objects();
+        if (!objects.empty())
+        {
+            auto prev_object = objects.back();
+            auto min_dist = (prev_object.radius + radius) * (prev_object.radius + radius);
+            if ((prev_object.position - position).lengthSq() < min_dist)
+                return;
+        }
+
         auto angle = 3.14f / 2.0f * sin(total_clock.getElapsedTime().asSeconds());
-        auto velocity = sf::Vector2f(100.0f * sin(angle), 100.0f * cos(angle));
-        auto &object = solver.add_object(position, randfloat(3.0f, 15.0f));
+        auto velocity = sf::Vector2<double>(100.0f * sin(angle), 100.0f * cos(angle));
+        auto &object = solver.add_object(position, radius);
         object.set_velocity(velocity, dt);
         object.set_color(getRainbow(total_clock.getElapsedTime().asSeconds()));
     }
