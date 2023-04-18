@@ -2,8 +2,8 @@
 
 #include "solver.hpp"
 
-#define WINDOW_WIDTH 1600.0f
-#define WINDOW_HEIGHT 900.0f
+#define WINDOW_WIDTH 2300.0f
+#define WINDOW_HEIGHT 1400.0f
 
 sf::Clock dt_clock;
 float last_time = dt_clock.getElapsedTime().asSeconds();
