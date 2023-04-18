@@ -15,7 +15,7 @@
 struct User
 {
     void OnStartup(sf::RenderWindow &window);
-    void OnUpdate(sf::RenderWindow &window, float dt);
+    void OnUpdate(sf::RenderWindow &window, double dt);
     void OnEvent(sf::RenderWindow &window, sf::Event &event);
 };
 

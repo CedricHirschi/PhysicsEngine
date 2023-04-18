@@ -54,7 +54,7 @@ void User::OnStartup(sf::RenderWindow &window)
     }
 }
 
-void User::OnUpdate(sf::RenderWindow &window, float dt)
+void User::OnUpdate(sf::RenderWindow &window, double dt)
 {
     solver.update(dt);
 

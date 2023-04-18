@@ -12,11 +12,7 @@ struct User user;
 
 int main()
 {
-    sf::ContextSettings settings;
-    // settings.antialiasingLevel = 8;
-
-    sf::RenderWindow window(sf::VideoMode(sf::Vector2u(WINDOW_WIDTH, WINDOW_HEIGHT)), "SFML works!", sf::Style::Default, settings);
-    // window.setFramerateLimit(240);
+    sf::RenderWindow window(sf::VideoMode(sf::Vector2u(WINDOW_WIDTH, WINDOW_HEIGHT)), "SFML works!", sf::Style::Default);
 
     user.OnStartup(window);
 
@@ -40,7 +36,7 @@ int main()
             user.OnEvent(window, event);
         }
 
-        float dt = dt_clock.getElapsedTime().asSeconds() - last_time;
+        double dt = dt_clock.getElapsedTime().asSeconds() - last_time;
         last_time = dt_clock.getElapsedTime().asSeconds();
 
         window.clear({50, 50, 50, 255});
