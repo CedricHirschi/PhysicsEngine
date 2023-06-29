@@ -5,7 +5,7 @@ This is a simple physics engine written in C++ using the SFML library. It is a w
 
 ## Installation
 ### Pre-requisites
-- GCC (SFML is picky here, the versiin available from [scoop](https://scoop.sh/) works on Windows)
+- GCC (SFML is picky here, the version available from [scoop](https://scoop.sh/) works on Windows, Linux is yet untested)
 - CMake
 - Make
 
