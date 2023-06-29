@@ -5,19 +5,19 @@ This is a simple physics engine written in C++ using the SFML library. It is a w
 
 ## Installation
 ### Pre-requisites
-- GCC / G++ 12.2.0 (MinGW) - [Tutorial](https://www.freecodecamp.org/news/how-to-install-c-and-cpp-compiler-on-windows/)
+- GCC (SFML is picky here, the versiin available from [scoop](https://scoop.sh/) works on Windows)
+- CMake
+- Make
 
 ### Build
-- Open the terminal from the repository folder
-- Compiling the program is done through `make`
-- The following `make` commands are available (for windows only, sorry):
-  * `all`: mapped to run
-  * `build`: builds executable
-  * `run`: runs executable (runs build if needed)
-  * `clean`: deletes build directory and zip
-  * `pack`: pack executable into a zip (runs build if needed)
-  * `find`: list files which will be compiled
-  * `help`: show this message
+- Open the terminal in the repository folder
+- Compiling is done through CMake and Make:
+
+```shell
+cmake -S . -B build
+cd build
+make
+```
 
 ## Usage
-- The program is currently a work in progress and is not yet complete.
+The program is currently a work in progress and is not yet and never will be complete.
