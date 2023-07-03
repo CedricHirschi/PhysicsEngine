@@ -1,0 +1,8 @@
+libxrandr-dev
+libxcursor-dev
+freeglut3-dev
+libudev-dev
+libopenal-dev
+libvorbis-dev
+libflac-dev
+libfreetype6-dev

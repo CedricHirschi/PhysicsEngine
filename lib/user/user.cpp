@@ -46,7 +46,8 @@ void User::OnStartup(sf::RenderWindow &window)
     solver.set_constraints(2, {window.getSize().x / 2.0f, window.getSize().y / 2.0f}, std::min(window.getSize().x, window.getSize().y) / 2.50f);
     solver.set_substeps(16);
 
-    if (!font.loadFromFile("C:\\Windows\\Fonts\\arial.ttf"))
+    // if (!font.loadFromFile("C:\\Windows\\Fonts\\arial.ttf"))
+    if (!font.loadFromFile("/usr/share/fonts/truetype/freefont/FreeMono.ttf"))
     {
         std::cout << "Error loading font" << std::endl;
     }
@@ -164,10 +165,10 @@ void spawn_objects(class VerletSolver &solver, double dt)
 
         auto object = solver.add_object(position, radius, getRainbow(total_clock.getElapsedTime().asSeconds()));
 
-        std::cout << (double)object.get_velocity(dt).angle().asDegrees();
+        // std::cout << (double)object.get_velocity(dt).angle().asDegrees();
 
         object.set_velocity(velocity, dt);
 
-        std::cout << " -> " << (double)object.get_velocity(dt).angle().asDegrees() << std::endl;
+        // std::cout << " -> " << (double)object.get_velocity(dt).angle().asDegrees() << std::endl;
     }
 }
